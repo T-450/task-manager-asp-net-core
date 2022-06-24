@@ -19,10 +19,18 @@ namespace task_manager.Controllers
         private ILogger<TaskController> _logger { get; }
 
         [HttpGet]
-        public OkObjectResult Get()
+        public async Task<ActionResult<IEnumerable<TaskModel>>> GetAll()
         {
-            throw new Exception("SOMETHING WENT WRONG!");
-            return Ok(_dbContext.TaskItems.AsNoTracking().ToList());
+            try
+            {
+                var tasks = await _dbContext.TaskItems.AsNoTracking().ToListAsync();
+                return Ok(tasks);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                throw;
+            }
         }
 
         [HttpPost]
@@ -35,14 +43,15 @@ namespace task_manager.Controllers
                     Name = taskDto.Name,
                     Completed = taskDto.Completed
                 };
-                _dbContext.TaskItems.Add(entity);
+
+                await _dbContext.TaskItems.AddAsync(entity).ConfigureAwait(false);
                 await _dbContext.SaveChangesAsync().ConfigureAwait(false);
 
                 return Ok("Entity created!");
             }
             catch (Exception e)
             {
-                _logger.LogError(e?.Message);
+                _logger.LogError(e.Message);
                 throw;
             }
         }
@@ -66,7 +75,7 @@ namespace task_manager.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError(e?.Message);
+                _logger.LogError(e.Message);
                 throw;
             }
         }
@@ -87,8 +96,8 @@ namespace task_manager.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError(e?.Message);
-                return Problem("Internal Server Error", statusCode: 500);
+                _logger.LogError(e.Message);
+                throw;
             }
         }
     }
