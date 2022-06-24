@@ -14,7 +14,8 @@ namespace task_manager.Infrastructure.Data.Mappings
                 .HasColumnType("VARCHAR(1000)");
             builder.Property(p => p.Completed)
                 .HasColumnType("BOOLEAN")
-                .HasDefaultValue(false);
+                .HasDefaultValue(false)
+                .IsRequired();
             builder.ToTable("Tasks");
         }
     }

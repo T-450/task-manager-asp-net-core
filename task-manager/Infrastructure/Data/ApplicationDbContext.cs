@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using task_manager.Infrastructure.Data.Mappings;
+using task_manager.Core.Models;
 
 namespace task_manager.Infrastructure.Data
 {
@@ -16,7 +16,7 @@ namespace task_manager.Infrastructure.Data
             ChangeTracker.AutoDetectChangesEnabled = false;
         }
 
-        public DbSet<TaskModelMapping> TaskItems { get; set; }
+        public DbSet<TaskModel> TaskItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -30,6 +30,7 @@ namespace task_manager.Infrastructure.Data
                 .Model
                 .GetEntityTypes()
                 .SelectMany(e => e.GetForeignKeys());
+
             // Defaults string types to a limit numbers of characters
             foreach (IMutableProperty property in modelProperties) property.SetColumnType("varchar(100)");
 

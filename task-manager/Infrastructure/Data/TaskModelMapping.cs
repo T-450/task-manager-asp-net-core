@@ -4,7 +4,7 @@ using task_manager.Core.Models;
 
 namespace task_manager.Infrastructure.Data
 {
-    public class TaskModelMapping: IEntityTypeConfiguration<TaskModel>
+    public class TaskModelMapping : IEntityTypeConfiguration<TaskModel>
     {
         public void Configure(EntityTypeBuilder<TaskModel> builder)
         {
